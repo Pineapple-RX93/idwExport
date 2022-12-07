@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+
+  <assemblyIdentity name="idwExport" version="1.0.0.0"></assemblyIdentity>
+
+  <clrClass clsid="{3bc1b654-b648-4173-9af6-1d459b782c1c}" progid="idwExport.StandardAddInServer" threadingModel="Both" name="idwExport.idwExport.StandardAddInServer" runtimeVersion=""></clrClass>
+
+  <file name="idwExport.dll" hashalg="SHA1"></file>
+
+</assembly>

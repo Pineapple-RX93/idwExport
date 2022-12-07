@@ -1,0 +1,60 @@
+Environment: AMxAssemblyEnvironment
+ Display Name: Assembly
+Environment: AMxAssemblySketchEnvironment
+ Display Name: Assembly Sketch
+Environment: AMxWeldmentEnvironment
+ Display Name: Weldment Assembly
+Environment: AMxWeldmentFeatureEnvironment
+ Display Name: Weldment Feature
+Environment: Archon:Env
+ Display Name: Inventor Studio
+Environment: DLxDrawingCustomViewEnvironment
+ Display Name: Drawing Custom View
+Environment: DLxDrawingEnvironment
+ Display Name: Drawing
+Environment: DLxDrawingModelSpaceEnvironment
+ Display Name: Drawing Model Space Sheet
+Environment: DLxDrawingSketchEnvironment
+ Display Name: Drawing Sketch
+Environment: DXxPresentationEnvironment
+ Display Name: Presentation
+Environment: FTC.ChangeManagerEnvironment
+ Display Name: Change Manager
+Environment: FWxMainFrameEnvironment
+ Display Name: Inventor
+Environment: HSL:Cable:AssemblyEnvironment
+ Display Name: Cable & Harness
+Environment: HSL:Cable:NailboardDrawingEnvironment
+ Display Name: Nailboard Drawing
+Environment: HSL:Cable:NailboardEditSketchEnvironment
+ Display Name: Nailboard Sketch
+Environment: HSL:Cable:PartEnvironment
+ Display Name: Harness Part
+Environment: MBxSheetMetalEnvironment
+ Display Name: Sheet Metal
+Environment: NBxNotebookEnvironment
+ Display Name: Notebook
+Environment: Piping Hose Environment
+ Display Name: Tube & Pipe Hose
+Environment: Piping Route Environment
+ Display Name: Tube & Pipe Route
+Environment: Piping Run Environment
+ Display Name: Tube & Pipe Run
+Environment: Piping Runs Environment
+ Display Name: Tube & Pipe Runs
+Environment: PMxiFeatureEnvironment
+ Display Name: iFeature
+Environment: PMxPartConstructionEnvironment
+ Display Name: Construction
+Environment: PMxPartEnvironment
+ Display Name: Part
+Environment: PMxPartFlatPatternEditEnvironment
+ Display Name: Flat Pattern
+Environment: PMxPartSketch3dEnvironment
+ Display Name: 3D Sketch
+Environment: PMxPartSketchEnvironment
+ Display Name: 2D Sketch
+Environment: PMxPartSolidEditEnvironment
+ Display Name: Explicit
+Environment: PMxPartSurfaceRepairEnvironment
+ Display Name: Repair
