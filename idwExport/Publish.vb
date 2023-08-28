@@ -54,10 +54,10 @@ Friend Module Publish
       'Check if folder exist, create if not
       On Error Resume Next
 
-      My.Computer.FileSystem.CreateDirectory(DrawingPath + "PDF")
+      My.Computer.FileSystem.CreateDirectory(DrawingPath + "WEB")
 
       'Set the destination file name
-      oDataMedium.FileName = DrawingPath + "PDF\" + DrawingName + ".pdf"
+      oDataMedium.FileName = DrawingPath + "WEB\" + DrawingName + ".pdf"
 
       'Publish document.
       PDFAddIn.SaveCopyAs(oDocument, oContext, oOptions, oDataMedium)
@@ -102,10 +102,10 @@ Friend Module Publish
 
       'Check if folder exist, create if not
       On Error Resume Next
-      My.Computer.FileSystem.CreateDirectory(DrawingPath + "DWG")
+      My.Computer.FileSystem.CreateDirectory(DrawingPath + "WEB")
 
       'Set the destination file name
-      oDataMedium.FileName = DrawingPath + "DWG\" + DrawingName + ".dwg"
+      oDataMedium.FileName = DrawingPath + "WEB\" + DrawingName + ".dwg"
 
       'Publish document.
       Call DWGAddIn.SaveCopyAs(oDocument, oContext, oOptions, oDataMedium)
@@ -113,7 +113,55 @@ Friend Module Publish
     End If
   End Sub
 
-  Public Sub Folder(oApp As Application, Path As String, PDF As Boolean, DWG As Boolean)
+  Public Sub DXF(oApp As Application)
+    ' Get the DXF translator Add-In.
+
+    Dim DXFAddIn As TranslatorAddIn = oApp.ApplicationAddIns.ItemById("{C24E3AC4-122E-11D5-8E91-0010B541CD80}")
+
+    'Set a reference to the active document (the document to be published).
+    Dim oDocument As Document = oApp.ActiveDocument
+
+    Dim oContext As TranslationContext = oApp.TransientObjects.CreateTranslationContext
+    oContext.Type = Inventor.IOMechanismEnum.kFileBrowseIOMechanism
+
+    ' Create a NameValueMap object
+    Dim oOptions As NameValueMap = oApp.TransientObjects.CreateNameValueMap
+
+    ' Create a DataMedium object
+    Dim oDataMedium As DataMedium = oApp.TransientObjects.CreateDataMedium
+
+    ' Check whether the translator has 'SaveCopyAs' options
+    If DXFAddIn.HasSaveCopyAsOptions(oDocument, oContext, oOptions) Then
+
+      Dim strIniFile As String = DLLPath & "DWGOut.ini"
+      'MsgBox(strIniFile)
+      ' Create the name-value that specifies the ini file to use.
+      oOptions.Value("Export_Acad_IniFile") = strIniFile
+    End If
+
+    Dim DrawingName As String = " "
+    Dim DrawingPath As String = " "
+    Dim DrawingFullName As String = oDocument.FullFileName
+
+    If DrawingFullName = "" Then
+      MsgBox("Please save Drawing File before export.")
+    Else
+      ClsFilename.SplitPath(DrawingFullName, DrawingPath, DrawingName)
+
+      'Check if folder exist, create if not
+      On Error Resume Next
+      My.Computer.FileSystem.CreateDirectory(DrawingPath + "WEB")
+
+      'Set the destination file name
+      oDataMedium.FileName = DrawingPath + "WEB\" + DrawingName + ".DXF"
+
+      'Publish document.
+      Call DXFAddIn.SaveCopyAs(oDocument, oContext, oOptions, oDataMedium)
+      ' MsgBox("DXF: " + DrawingPath + "DXF\" + DrawingName + ".DXF" + " Exported")
+    End If
+  End Sub
+
+  Public Sub Folder(oApp As Application, Path As String, PDF As Boolean, DWG As Boolean, DXF As Boolean)
     Dim oDoc As Document
     Dim folderName As String = " "
 
@@ -126,6 +174,7 @@ Friend Module Publish
       oDoc = oApp.Documents.Open(foundFile)
       If PDF Then Publish.PDF(oApp)
       If DWG Then Publish.DWG(oApp)
+      If DXF Then Publish.DXF(oApp)
       oDoc.Close()
       'MsgBox(foundFile)
     Next

@@ -17,6 +17,7 @@ Namespace idwExport
     Private m_AddInCLSID As String
     Private WithEvents M_PDFOutButtonDef As ButtonDefinition
     Private WithEvents M_DWGOutButtonDef As ButtonDefinition
+    Private WithEvents M_WEBOutButtonDef As ButtonDefinition
     Private WithEvents M_FolderOutButtonDef As ButtonDefinition
     Private WithEvents M_UserInterfaceEvents As UserInterfaceEvents
     Dim c_Toolbar As String = "idwExportToolbarIntName"
@@ -83,6 +84,22 @@ Namespace idwExport
           "Export DWG", "Export DWG", IconSmallIPictureDisp, IconLargeIPictureDisp)
 
         M_DWGOutButtonDef.Enabled = True
+
+        Try
+          Dim IconStream As System.IO.Stream =
+            Me.GetType().Assembly.GetManifestResourceStream("idwExport.WEBOut.png")
+          Dim IconImage As System.Drawing.Image = New System.Drawing.Bitmap(IconStream)
+
+          IconSmallIPictureDisp = PictureDispConverter.ToIPictureDisp(IconImage)
+          IconLargeIPictureDisp = PictureDispConverter.ToIPictureDisp(IconImage)
+        Catch ex As Exception
+        End Try
+
+        M_WEBOutButtonDef = m_inventorApplication.CommandManager.ControlDefinitions.AddButtonDefinition(
+          "Export WEB", "idwExportWEBCmdIntName", Inventor.CommandTypesEnum.kQueryOnlyCmdType, m_AddInCLSID,
+          "Export WEB", "Export WEB", IconSmallIPictureDisp, IconLargeIPictureDisp)
+
+        M_WEBOutButtonDef.Enabled = True
 
         Try
           Dim IconStream As System.IO.Stream =
@@ -159,12 +176,14 @@ Namespace idwExport
       ' Create a control within the panel
       Call oPanel.CommandControls.AddButton(M_PDFOutButtonDef, True)
       Call oPanel.CommandControls.AddButton(M_DWGOutButtonDef, True)
+      Call oPanel.CommandControls.AddButton(M_WEBOutButtonDef, True)
       Call oPanel.CommandControls.AddButton(M_FolderOutButtonDef, True)
 
       oTab = oRibbon.RibbonTabs.Item("id_TabAnnotate")
       oPanel = oTab.RibbonPanels.Add("idw Export", "id_PanelA_BWM", m_AddInCLSID)
       Call oPanel.CommandControls.AddButton(M_PDFOutButtonDef, True)
       Call oPanel.CommandControls.AddButton(M_DWGOutButtonDef, True)
+      Call oPanel.CommandControls.AddButton(M_WEBOutButtonDef, True)
       Call oPanel.CommandControls.AddButton(M_FolderOutButtonDef, True)
 
     End Sub
@@ -183,6 +202,9 @@ Namespace idwExport
       M_PDFOutButtonDef = Nothing
       M_DWGOutButtonDef.Delete()
       M_DWGOutButtonDef = Nothing
+      M_WEBOutButtonDef.Delete()
+      M_WEBOutButtonDef = Nothing
+
       'Marshal.ReleaseComObject(m_inventorApplication)
       m_inventorApplication = Nothing
       GC.WaitForPendingFinalizers()
@@ -234,6 +256,22 @@ Namespace idwExport
 
     End Sub
 
+    Private Sub M_WEBOutButtonDef_OnExecute(ByVal Context As NameValueMap
+                                               ) Handles M_WEBOutButtonDef.OnExecute
+
+      Try
+        DXF(m_inventorApplication)
+      Catch ex As Exception
+        Windows.Forms.MessageBox.Show(ex.ToString())
+      End Try
+      Try
+        PDF(m_inventorApplication)
+      Catch ex As Exception
+        Windows.Forms.MessageBox.Show(ex.ToString())
+      End Try
+
+    End Sub
+
     Private Sub M_FolderOutButtonDef_OnExecute(Context As NameValueMap) Handles M_FolderOutButtonDef.OnExecute
       Try
         Dim m_Folder_Option_Form = New fmPublishFolder(addInObj)
@@ -241,7 +279,7 @@ Namespace idwExport
         m_Folder_Option_Form.ShowDialog()
         If m_Folder_Option_Form.Path <> "" Then
           Folder(m_inventorApplication, m_Folder_Option_Form.Path,
-                 m_Folder_Option_Form.PDF, m_Folder_Option_Form.DWG)
+                 m_Folder_Option_Form.PDF, m_Folder_Option_Form.DWG, m_Folder_Option_Form.DXF)
         End If
         m_Folder_Option_Form = Nothing
       Catch ex As Exception
